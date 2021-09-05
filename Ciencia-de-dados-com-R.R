@@ -2178,5 +2178,5 @@ library(RColorBrewer)
   #criando a visualizacao
   cores.viridis <- viridis::viridis(n = 20)
 
-  #atualizado
+  #atualizado em 05-09-2021
   
