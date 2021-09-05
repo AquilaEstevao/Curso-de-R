@@ -1,10 +1,6 @@
 
 #CIENCIA DE DADOS COM R - INTRODUCAO
 
-
-
-
-
 #CAP.1 (INTRODUCAO)
 
 #CIENCIA DE DADOS: E o estudo e a analise de dados, com extracao de conhecimentos e criacao de novas informacoes. Ciencia da Computacao + Estatistica.
@@ -40,8 +36,6 @@ R.Version()
 #4) Entrenosite https://stackoverflow.com e digite [r] na caixadebusca.Oqueacontece?
         # E apresentado uma breve especificacao do software R
 #############################################################################################################################################################################
-
-
 
 
 
@@ -132,9 +126,6 @@ rm(carro)
 
 
 
-
-
-
 #CAP.3 (LENDO OS DADOS)
 
  #Garantir boa fonte de dados. Dados ruins, inconsistentes, nao confiaveis ou mal formatados podem gerar muita dor de cabeca para o analista
@@ -201,12 +192,6 @@ rm(fwf)
 # read.delim(file, header = TRUE, sep = "\t", quote = "\"", dec = ".", fill = TRUE, comment.char = "", ...)
 # read.fwf(file, widths, header = FALSE, sep = "\t", skip = 0, row.names, col.names, n = -1, buffersize = 2000, fileEncoding = "", ...)
 #############################################################################################################################################################################
-
-
-
-
-
-
 
 
 
@@ -610,13 +595,9 @@ senadores.pdt.df <- senado %>%
     arrange(-QntVotosRe)
   # O Nordeste foi a regiao com a maior quantidade de votos 'S'
 ###################################################################################################################################################################################################  
-  
-  
-  
-  
-  
-  
-  
+
+
+
 #CAPITULO 5 (LIMPANDO DADOS)
 
   #Unica variavel em uma coluna e uma unica observacao em uma linha
@@ -755,12 +736,10 @@ str_replace_all(cnpj, '\\.|/|-', '')
   #1) Utilizando senado.csv, monte uma tabela mostrando a quantidade de votos sim e nao por cooalisao, no formato wide ("sim" e "nao" sao linhas e "coalisao" ou "nao coalisao" sao colunas).
     #DICA: mutate(tipo_coalisao = ifelse(GovCoalition, 'Coalisao', 'Nao Coalisao'))
 
-
         senadoCal <- senado %>%
           mutate(tipo_coalisao = ifelse(GovCoalition, 'Coalisao', 'Nao Coalisao')) %>%
           mutate(tipo_voto = ifelse(Vote == 'S', "VotosSim", "VotosN?o"))
-          
-        
+                  
         senadoCal <- senado %>%
           mutate(tipo_coalisao = ifelse(GovCoalition, 'Coalisao', 'Nao Coalisao')) %>%
           #mutate(tipo_voto = ifelse(Vote == 'N', 'VotosNao', 'VotosSim')) %>%
@@ -769,15 +748,10 @@ str_replace_all(cnpj, '\\.|/|-', '')
           summarise(VotosNao = sum(Vote == 'N', na.rm = TRUE)) #%>%
           #summarise(VotosSim = sum(Vote == 'S', na.rm = TRUE))
         # arrange(-QntVotosN)
-
-      
-
-               
+                
       senado.wide <- senadoCal %>%
         spread(key = tipo_coalisao, value = Vote)
-      
-      
-      
+          
 
   #2) Utilizando o dataframe abaixo, obtenha o resultado a seguir:
     #DICA: separate(), str_replace_all(), str_trim(), str_sub()
@@ -801,13 +775,9 @@ str_replace_all(cnpj, '\\.|/|-', '')
       #cadastros.tel <- cadastros.email %>%
         cadastros.tel <- str_replace_all(cadastros.email$telefone, '\\.|/|-(', '')
         cadastros.tel
- ###################################################################################################################################################################################################  
-        
-        
-        
-        
-        
-        
+####################################################################################################################################################################################################  
+
+
 
 #CAPITULO 6 (JUNTANDO DADOS)
         #Existem duas grandes formas de juncao de dados (UNIAO) e (CRUZAMENTO)
@@ -933,8 +903,7 @@ str_replace_all(cnpj, '\\.|/|-', '')
     full_join(tabela_voos, by = c('dest' = 'faa'))
 
   #2) Utilizando os dataframes abaixo,chegue no resultado a seguir
-  
-  
+    
   participantes <- data.frame(
     Nome = c('Carlos', 'Maur?cio', 'Ana Maria', 'Rebeca', 'Patr?cia'),
     Estado = c('Bras?lia', 'Minas Gerais', 'Goi?s', 'S?o Paulo', 'Cear?'),
@@ -950,13 +919,9 @@ str_replace_all(cnpj, '\\.|/|-', '')
   )
   participantes
 ###################################################################################################################################################################################################  
-  
-  
-  
-  
-  
-  
-  
+
+
+
 #CAPITULO 7 (ESCREVENDO DADOS)
   
   #Escrevendo CSV
@@ -998,13 +963,9 @@ str_replace_all(cnpj, '\\.|/|-', '')
   rm(receita_ano)
   load('receita_ano.Rdata')
 ###################################################################################################################################################################################################  
-  
-  
-  
-  
-  
-  
-  
+
+
+
 #CAPITULO 8 (OBTENDO DADOS)
   #Duas formas comuns para obtencao de dados externos sao, API (Application Programming Interface) ou por meio da tecnica de WebScrapping
 
@@ -1066,13 +1027,9 @@ str_replace_all(cnpj, '\\.|/|-', '')
   #2) Escolha um site do seu interesse e fa?a um data frame com uma parte do seu conte?do (tabelas,listas etc.).
   
 ###################################################################################################################################################################################################  
-  
-  
-  
-  
-  
-  
-  
+
+
+
 #CAPITULO 9 (VISUALIZACAO DE DADOS(ggplot2))
   #Graficos sao camadas, camadas formadas por dados, mapementos esteticos, transformacoes estatisticas 
   #dos dados, objetos gemetricos (pontos, linhas, barras etc.) e ajuste de posicionamento.
@@ -1100,8 +1057,7 @@ str_replace_all(cnpj, '\\.|/|-', '')
     <SCALE_FUNCTION> + #uma para cada elemento estetico
     <COORDINATE_FUNCTION> +
     <FACET_FUNCTION> #dividir o gr?fico em sublots
-  
-  
+    
 library(ggplot2)
 data ("mtcars")
 ?mtcars
@@ -1141,8 +1097,6 @@ ggplot(mtcars) +
        y = 'Consumo',
        x = 'Pot?ncia')
 
-
-
 #Mapeamento Estetico
 
   #mapeamento das variaveis dos dados para as caracteristicas visuais dos objetos geometricos (pontos, barras, linhas etc.)
@@ -1155,7 +1109,6 @@ ggplot(mtcars) +
       # Preenchimento(fill)
       # Transparencia (alpha)
       # Texto(label)
-
 
 #Objetos Geometricos
 
@@ -1171,7 +1124,6 @@ ggplot(mtcars) +
     # Boxplot                 geom_boxplot()
     # Densidade               geom_density()
     # Gr?fico de linhas       geom_line()
-
 
 #utilizando a funcao aes() como global dieretamente na funcao ggplot(), dessa forma o mapeamento estetico
 #e aplicado para todos os objetos geometricos do grafcio
@@ -1226,7 +1178,6 @@ ggplot(iris, aes(x = Petal.Length, y = Petal.Width, color = Species)) +
   #definimos quais seriam os pontos em que rotulos deveriam ser exibidos em cada exio
   #no eixo y definimos que os limites seriam 0 e 3
   
-
 #Tipos de Vari?veis
   #para utilizar escala e importante saber o tipo de variavel de cada elemento estetico
   #pois assim sabera com mais facilidade qual e o tipo de escala que deve ser escolhido
@@ -1338,7 +1289,6 @@ help(strptime)
     geom_line() +
     scale_x_date(breaks = seq_datas, date_labels = "%y")
   
-
 #Escala de Cores (color) e Preenchimento (fill)
   #O tipo de variavel utilizado define qual o tipo de escala
   
@@ -1392,8 +1342,7 @@ library(RColorBrewer)
   ggplot(Wage, aes(y = Wage, x = age, color = education)) +
     geom_point() +
     scale_color_manual(values = c("#66C2A5", "#FC8D62", "#8DA0CB", "#E78AC3", "#A6D854"))
-  
-  
+    
 #Subplots (facet)
   #Permite que se cire ou replique o mesmo grafico para um conjunto de valores de outra variavel
   #Principais funcoes: facet_wrap() e facet_grid()
@@ -1594,8 +1543,7 @@ library(RColorBrewer)
     # shape
     # size
     # stroke
-  
-  
+    
   library(hrbrthemes)
   install.packages("gapminder")  
   library(gapminder)
@@ -1653,8 +1601,7 @@ library(RColorBrewer)
     labs(title = "Rela??o entre Renda per Capita e Expectativa de Vida - 2007",
          x = "Renda per Capita (escala log 10)",
          y = "Expectativa de Vida")
-  
-  
+    
   #GRAFICO DE BOLHAS
   #Extensao natural do grafico de pontos
   #Observar possiveis relacoes entre as tres variaveis
@@ -1799,7 +1746,6 @@ library(RColorBrewer)
          y = "Anos") +
     theme_ipsum(plot_title_size = 12,
                 axis_title_size = 10)
-
   
   #GRAFICO DE LINHAS
   #Apresentar a evolucao de uma variavel quantitativa em um intervalo de tempo
@@ -2098,8 +2044,7 @@ library(RColorBrewer)
     theme_ipsum(plot_title_size = 12,
                 axis_title_size = 10) +
     theme(panel.grid.major.y = element_line(linetype = "dashed"))
-  
-  
+    
   #PLOTANDO FUNCAO
   
   reta <- function(a, b, x){
@@ -2130,7 +2075,6 @@ library(RColorBrewer)
     stat_function(fun = logit, args = list(a = 1), aes(color = "a = 1")) +
     stat_function(fun = logit, args = list(a = 0.5), aes(color = "a = 0.5")) +
     stat_function(fun = logit, args = list(a = 2), aes(color = "a = 2"))
-  
   
   #MAPAS (140)
   library(tidyverse)
