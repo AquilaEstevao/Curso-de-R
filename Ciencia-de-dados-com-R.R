@@ -2082,7 +2082,7 @@ library(RColorBrewer)
   #world_map <- read_delim('D:/2.CURSOS/1.CURSO DE R/Ciencia de dados com R/world_map.csv', delim = ";",
   #                        locale = locale(encoding = "ISO-8859-1",
   #                                        decimal_mark = ","))
-  world_map <- read_delim('C:/Users/acampos/Documents/CURSO DE R/Ciencia de dados com R/world_map.csv', delim = ";",
+  world_map <- read_delim('D:/2.CURSOS/1.CURSO DE R/Ciencia de dados com R/world_map.csv', delim = ";",
                           locale = locale(encoding = "ISO-8859-1",
                                           decimal_mark = ","))  
   head(world_map)  
@@ -2091,11 +2091,12 @@ library(RColorBrewer)
   
   world_map <- world_map %>%
   filter(id != "Antarctica")
-
+ 
+  
   #exp.2015 <- read_delim('D:/2.CURSOS/1.CURSO DE R/Ciencia de dados com R/EXP_2015_PAIS.csv', delim = ";",
   #                       locale = locale(encoding = "ISO-8859-1"),
   #                       col_types = 'ccd')
-  exp.2015 <- read_delim('C:/Users/acampos/Documents/CURSO DE R/Ciencia de dados com R/EXP_2015_PAIS.csv', delim = ";",
+  exp.2015 <- read_delim('D:/2.CURSOS/1.CURSO DE R/Ciencia de dados com R/EXP_2015_PAIS.csv', delim = ";",
                          locale = locale(encoding = "ISO-8859-1"),
                          col_types = 'ccd')
   head(exp.2015)
@@ -2103,13 +2104,15 @@ library(RColorBrewer)
   world_map <- left_join(world_map, exp.2015, by = 'NO_PAIS_POR') %>%
     mutate(class = cut(VL_FOB, breaks = c(0, 1e6, 10e6, 100e6, 1e9, 10e9, Inf)))
   
+  head(world_map)  
+  
   ggplot(world_map, aes(x = long, y = lat, group = group)) +
     geom_polygon(aes(fill = class), col = 'black', size = 0.1) +
     scale_fill_brewer(palette = "Blues", breaks = levels(world_map$class),
                       labels = c("(0, 1Mi]", "(1 Mi,10Mi]", "(10 Mi,100Mi]",
                                  "(100 Mi,1Bi]", "(1 Bi,10Bi]", "> 10Bi"),
                       na.value = 'grey70') +
-    labs(title = "Exporta??es Brasileiras - 2015",
+    labs(title = "Exportacoes Brasileiras - 2015",
          subtitle = 'Valor FOB') +
     coord_quickmap() + 
     theme(axis.text.x = element_blank(),
@@ -2139,9 +2142,9 @@ library(RColorBrewer)
   library(rgeos)
   library(broom)
   
-  ogrListLayers('C:/Users/acampos/Documents/CURSO DE R/Ciencia de dados com R/mapas/mg_municipios/31MUE250GC_SIR.shp')  
+  ogrListLayers('D:/2.CURSOS/1.CURSO DE R/Ciencia de dados com R/mapas/mg_municipios/31MUE250GC_SIR.shp')  
   
-  mg_mapa <- readOGR('C:/Users/acampos/Documents/CURSO DE R/Ciencia de dados com R/mapas/mg_municipios/31MUE250GC_SIR.shp', layer = '31MUE250GC_SIR')
+  mg_mapa <- readOGR('D:/2.CURSOS/1.CURSO DE R/Ciencia de dados com R/mapas/mg_municipios/31MUE250GC_SIR.shp', layer = '31MUE250GC_SIR')
   
   mg_mapa_data <- data.frame(mg_mapa)
 
@@ -2159,7 +2162,7 @@ library(RColorBrewer)
     coord_quickmap()
   
   #adicionando dados ao mapa
-  REM_RAIS_MG_2015 <- read_delim('C:/Users/acampos/Documents/CURSO DE R/Ciencia de dados com R/REM_RAIS_MG_2015.csv',
+  REM_RAIS_MG_2015 <- read_delim('D:/2.CURSOS/1.CURSO DE R/Ciencia de dados com R/REM_RAIS_MG_2015.csv',
                                  delim = ";",
                                  col_types = 'cd',
                                  skip = 1,
@@ -2177,6 +2180,57 @@ library(RColorBrewer)
   
   #criando a visualizacao
   cores.viridis <- viridis::viridis(n = 20)
-
-  #atualizado em 05-09-2021
+  ggplot(mg_mapa, aes(x = long, y = lat, group = group, fill = mediana)) + 
+    geom_polygon(color = 'black', size = 0.1) +
+    scale_fill_gradientn(colours = cores.viridis,
+                         breaks = c(800, 1150, 1500),
+                         labels = c("\u2264 800", "1.150", "\u2265 1.500")) +
+    labs(title = "Mediana daRemuneração",
+         subtitle = "Minais Gerais-Dezembro/2015.ValoresemR$",
+         caption = "Fonte: RAIS/MTE") +
+    coord_quickmap() +
+    theme(axis.text.x = element_blank(),
+          axis.text.y = element_blank(),
+          axis.title.x = element_blank(),
+          axis.title.y = element_blank())
+  
+  #SIMPLIFICANDO O SHAPEFILE
+  
+  #E possivel simplificar shapefiles grandes e pesados com a funcao gSimplify()
+  library(rgeos)
+  mg_mapa <- readOGR('D:/2.CURSOS/1.CURSO DE R/Ciencia de dados com R/mapas/mg_municipios/31MUE250GC_SIR.shp',
+                     layer = '31MUE250GC_SIR')
+  
+  df <- data.frame(mg_mapa)
+  mg_mapa <- gSimplify(mg_mapa, tol=0.01, topologyPreserve = TRUE)
+  mg_mapa = SpatialPolygonsDataFrame(mg_mapa, data=df)
+  
+  mg_mapa <- tidy(mg_mapa, region = "CD_GEOCMU")
+  
+  # Para adicionar os nomes dos municípios
+  mg_mapa <- left_join(mg_mapa, mg_mapa_data, by = c("id" = "CD_GEOCMU"))
+  
+  ggplot(mg_mapa, aes(x = long, y = lat, group = group)) +
+    geom_polygon(color = 'black', fill = 'white', size = 0.1) +
+    coord_quickmap()
+  
+  #Encoding dos dados do shapefile
+  #Pode-se utilizar a funcao iconv() para converter o encoding de uma variavel caso apresente problemas
+  mg_mapa <- readOGR('D:/2.CURSOS/1.CURSO DE R/Ciencia de dados com R/mapas/mg_municipios/31MUE250GC_SIR.shp',
+                     layer = '31MUE250GC_SIR')
+  mg_mapa@data$NM_MUNICIP <- iconv(mg_mapa@data$NM_MUNICIP,
+                                   from = "UTF-8",
+                                   to = "ISO-8859-1")
+  
+  #Salvando Graficos
+  # 1 - Aba Plots: Com tres opcoes exportar para o clipboard, salvar como PDF ou salvar comoimagem.
+  # 2 - Usar a funcao ggsave
+  ggsave(filename, plot = last_plot(), device = NULL, path = NULL,
+         scale = 1, width = NA, height = NA, units = c("in", "cm", "mm"),
+         dpi = 300, limitsize = TRUE, ...) #O argumento device é usado para escolher-se o tipo de arquivo ("eps","ps","tex"(pictex),"pdf","jpeg", "tiff","png","bmp","svg"or"wmf").
+  
+  #Extensoes do ggplot2
+  
+  
+  #atualizado em 14-10-2021
   
